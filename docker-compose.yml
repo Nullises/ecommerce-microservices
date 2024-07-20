@@ -18,9 +18,9 @@ services:
       - NATS_SERVERS=nats://nats-server:4222
 
   products-ms:
-    build: ./products
+    build: ./products-ms
     volumes:
-      - ./products/src:/usr/src/app/src
+      - ./products-ms/src:/usr/src/app/src
     command: npm run start:dev
     environment:
       - PORT=3001
@@ -31,9 +31,9 @@ services:
   orders-ms:
     depends_on:
       - orders-db
-    build: ./orders
+    build: ./orders-ms
     volumes:
-      - ./orders/src:/usr/src/app/src
+      - ./orders-ms/src:/usr/src/app/src
     command: npm run start:dev
     environment:
       - PORT=3002
@@ -46,7 +46,7 @@ services:
     image: postgres:16.2
     restart: always
     volumes:
-      - ./orders/postgres:/var/lib/postgresql/data
+      - ./orders-ms/postgres:/var/lib/postgresql/data
     ports:
       - 5498:5432
     environment:
