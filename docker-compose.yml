@@ -14,8 +14,8 @@ services:
       - ./client-gateway/src:/usr/src/app/src
     command: npm run start:dev
     environment:
-      - PORT=3000
-      - NATS_SERVERS=nats://nats-server:4222
+      - PORT=${CLIENT_GATEWAY_PORT}
+      - NATS_SERVERS=${NATS_SERVERS}
 
   products-ms:
     build: ./products-ms
@@ -23,9 +23,9 @@ services:
       - ./products-ms/src:/usr/src/app/src
     command: npm run start:dev
     environment:
-      - PORT=3001
-      - NATS_SERVERS=nats://nats-server:4222
-      - DATABASE_URL=file:./dev.db
+      - PORT=${PRODUCTS_MICROSERVICE_PORT}
+      - NATS_SERVERS=${NATS_SERVERS}
+      - DATABASE_URL=${PRODUCTS_DATABASE_URL}
 
   # Orders MS
   orders-ms:
@@ -37,8 +37,8 @@ services:
     command: npm run start:dev
     environment:
       - PORT=3002
-      - DATABASE_URL=postgresql://root:toor@orders-db:5432/ordersdb?schema=public
-      - NATS_SERVERS=nats://nats-server:4222
+      - DATABASE_URL=${ORDERS_DATABASE_URL}
+      - NATS_SERVERS=${NATS_SERVERS}
 
   # Orders DB
   orders-db:
@@ -48,8 +48,23 @@ services:
     volumes:
       - ./orders-ms/postgres:/var/lib/postgresql/data
     ports:
-      - 5498:5432
+      - ${ORDERS_DB_PORT}:5432
     environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=toor
-      - POSTGRES_DB=ordersdb
+      - POSTGRES_USER=${ORDERS_DB_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${ORDERS_DB_POSTGRES_PASSWORD}
+      - POSTGRES_DB=${ORDERS_DB_POSTGRES_DB}
+  # Payment
+  payment-ms:
+    build: ./payment-ms
+    ports:
+      - ${PAYMENTS_MICROSERVICE_PORT}:${PAYMENTS_MICROSERVICE_PORT}
+    volumes:
+      - ./payment-ms/src:/usr/src/app/src
+    command: npm run start:dev
+    environment:
+      - PORT=${PAYMENTS_MICROSERVICE_PORT}
+      - NATS_SERVERS=${NATS_SERVERS}
+      - STRIPE_SECRET=${STRIPE_SECRET}
+      - STRIPE_CANCEL_URL=${STRIPE_CANCEL_URL}
+      - STRIPE_SUCCESS_URL=${STRIPE_SUCCESS_URL}
+      - STRIPE_ENDPOINT_SECRET=${STRIPE_ENDPOINT_SECRET}

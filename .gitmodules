@@ -7,3 +7,6 @@
 [submodule "products-ms"]
 	path = products-ms
 	url = https://github.com/Nullises/microservices-products-practice.git
+[submodule "payment-ms"]
+	path = payment-ms
+	url = https://github.com/Nullises/payment.git
