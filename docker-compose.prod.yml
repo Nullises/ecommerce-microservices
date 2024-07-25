@@ -1,0 +1,65 @@
+version: "3"
+
+services:
+  nats-server:
+    image: nats:latest
+
+  client-gateway:
+    build:
+      context: ./client-gateway
+      dockerfile: dockerfile.prod
+    image: client-gateway-prod
+    ports:
+      - ${CLIENT_GATEWAY_PORT}:${CLIENT_GATEWAY_PORT}
+    environment:
+      - PORT=${CLIENT_GATEWAY_PORT}
+      - NATS_SERVERS=${NATS_SERVERS}
+
+  products-ms:
+    build:
+      context: ./products-ms
+      dockerfile: dockerfile.prod
+    ports:
+      - ${PAYMENTS_MICROSERVICE_PORT}:${PAYMENTS_MICROSERVICE_PORT}
+    image: products-ms-prod
+    environment:
+      - PORT=${PRODUCTS_MICROSERVICE_PORT}
+      - NATS_SERVERS=${NATS_SERVERS}
+      - DATABASE_URL=${PRODUCTS_DATABASE_URL}
+
+  # Orders MS
+  orders-ms:
+    build:
+      context: ./orders-ms
+      dockerfile: dockerfile.prod
+      args:
+        - ORDERS_DATABASE_URL=${ORDERS_DATABASE_URL_PROD}
+    image: orders-ms-prod
+    environment:
+      - PORT=${ORDERS_MICROSERVICE_PORT}
+      - DATABASE_URL=${ORDERS_DATABASE_URL_PROD}
+      - NATS_SERVERS=${NATS_SERVERS}
+  # Payment
+  payment-ms:
+    build:
+      context: ./payment-ms
+      dockerfile: dockerfile.prod
+    image: payment-ms-prod
+    environment:
+      - PORT=${PAYMENTS_MICROSERVICE_PORT}
+      - NATS_SERVERS=${NATS_SERVERS}
+      - STRIPE_SECRET=${STRIPE_SECRET}
+      - STRIPE_CANCEL_URL=${STRIPE_CANCEL_URL}
+      - STRIPE_SUCCESS_URL=${STRIPE_SUCCESS_URL}
+      - STRIPE_ENDPOINT_SECRET=${STRIPE_ENDPOINT_SECRET}
+  # Auth
+  auth-ms:
+    build:
+      context: ./auth-ms
+      dockerfile: dockerfile.prod
+    image: auth-ms-prod
+    environment:
+      - PORT=${AUTH_MICROSERVICE_PORT}
+      - DATABASE_URL=${AUTH_DATABASE_URL}
+      - NATS_SERVERS=${NATS_SERVERS}
+      - SECRET=${SECRET}

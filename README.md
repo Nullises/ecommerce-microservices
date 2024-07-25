@@ -41,3 +41,25 @@ git submodule update --remote
 Si se trabaja en el repositorio que tiene los sub-módulos, **primero actualizar y hacer push** en el sub-módulo y **después** en el repositorio principal.
 
 Si se hace al revés, se perderán las referencias de los sub-módulos en el repositorio principal y tendremos que resolver conflictos.
+
+# Prod
+
+1. Clonar el repo
+2. Crear un .env basado en el .env.template
+3. Ejecutar comando
+
+```
+docker compose -f docker-compose.prod.yml build
+```
+
+4. Si quiero levantar todas las imágenes simultáneamente y buildear
+
+```
+docker compose -f docker-compose.prod.yml up
+```
+
+5. Si quiero detener y remover todas las imágenes
+
+```
+docker compose -f docker-compose.prod.yml down
+```
