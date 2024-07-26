@@ -8,7 +8,7 @@ services:
     build:
       context: ./client-gateway
       dockerfile: dockerfile.prod
-    image: client-gateway-prod
+    image: us-central1-docker.pkg.dev/tienda-microservices-430521/ecommerce-ms/client-gateway-prod
     ports:
       - ${CLIENT_GATEWAY_PORT}:${CLIENT_GATEWAY_PORT}
     environment:
@@ -21,7 +21,7 @@ services:
       dockerfile: dockerfile.prod
     ports:
       - ${PAYMENTS_MICROSERVICE_PORT}:${PAYMENTS_MICROSERVICE_PORT}
-    image: products-ms-prod
+    image: us-central1-docker.pkg.dev/tienda-microservices-430521/ecommerce-ms/products-ms-prod
     environment:
       - PORT=${PRODUCTS_MICROSERVICE_PORT}
       - NATS_SERVERS=${NATS_SERVERS}
@@ -34,7 +34,7 @@ services:
       dockerfile: dockerfile.prod
       args:
         - ORDERS_DATABASE_URL=${ORDERS_DATABASE_URL_PROD}
-    image: orders-ms-prod
+    image: us-central1-docker.pkg.dev/tienda-microservices-430521/ecommerce-ms/orders-ms-prod
     environment:
       - PORT=${ORDERS_MICROSERVICE_PORT}
       - DATABASE_URL=${ORDERS_DATABASE_URL_PROD}
@@ -44,7 +44,7 @@ services:
     build:
       context: ./payment-ms
       dockerfile: dockerfile.prod
-    image: payment-ms-prod
+    image: us-central1-docker.pkg.dev/tienda-microservices-430521/ecommerce-ms/payment-ms-prod
     environment:
       - PORT=${PAYMENTS_MICROSERVICE_PORT}
       - NATS_SERVERS=${NATS_SERVERS}
@@ -57,7 +57,7 @@ services:
     build:
       context: ./auth-ms
       dockerfile: dockerfile.prod
-    image: auth-ms-prod
+    image: us-central1-docker.pkg.dev/tienda-microservices-430521/ecommerce-ms/auth-ms-prod
     environment:
       - PORT=${AUTH_MICROSERVICE_PORT}
       - DATABASE_URL=${AUTH_DATABASE_URL}
