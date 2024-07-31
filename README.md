@@ -55,7 +55,7 @@ docker compose -f docker-compose.prod.yml build
 4. Si quiero levantar todas las imágenes simultáneamente y buildear
 
 ```
-docker compose -f docker-compose.prod.yml up
+docker compose -f docker-compose.prod.yml up --build
 ```
 
 5. Si quiero detener y remover todas las imágenes
